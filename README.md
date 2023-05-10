@@ -12,8 +12,7 @@ Implemented Q-learning algorithm on the Taxi learning problem using OpenAI's Gym
 
 More information about OpenAI's GYM Toy Text Taxi environment can be found here:
 
-[GYM Toy Text](https://www.gymlibrary.dev/environments/toy_text/)
-
+[GYM Toy Text](https://www.gymlibrary.dev/environments/toy_text/) <br>
 [Taxi Environment](https://www.gymlibrary.dev/environments/toy_text/taxi/)
 
 ## The Taxi Problem:
