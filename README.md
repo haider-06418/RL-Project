@@ -6,12 +6,14 @@
 
 ## About the Project
 
-Implemented Q-learning algorithm on the Taxi learning problem from OpenAI's Gym Toy Text Taxi environment. Analyzed it for various values of α (Learning rate) in terms of: 
+Implemented Q-learning algorithm on the Taxi learning problem using OpenAI's Gym Toy Text Taxi environment. Analyzed it for various values of α (Learning rate) in terms of: 
 - Computational efficiency, i.e., the time taken to converge
 - Maximizing reward: Running the learned policies for each α value for various starting states and calculating the average reward to see which α value results in the most average reward
 
 More information about OpenAI's GYM Toy Text Taxi environment can be found here:
+
 [GYM Toy Text](https://www.gymlibrary.dev/environments/toy_text/)
+
 [Taxi Environment](https://www.gymlibrary.dev/environments/toy_text/taxi/)
 
 ## The Taxi Problem:
