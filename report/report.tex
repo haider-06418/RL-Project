@@ -1,1 +1,42 @@
-% initial report tex file
+\documentclass{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{booktabs}
+\usepackage{multirow}
+
+\begin{document}
+
+\title{Reinforcement Learning Project Report: Q-learning Algorithm}
+
+\author{Muhammad Haider Abbas-Muhammad Ahsan\
+Habib University\
+ma06418@st.habib.edu.pk-ma06371@st.habib.edu.pk}
+
+\maketitle
+
+\begin{abstract}
+Reinforcement learning is a powerful machine learning technique that enables an agent to learn optimal behavior in a given environment through trial and error. In this project, we explore the performance of the Q-learning algorithm, one of the most popular RL algorithms, on the Taxi-v3 environment. Specifically, we investigate the impact of the learning rate on the computational efficiency and the maximization of reward.
+\end{abstract}
+
+\section{Introduction}
+Reinforcement learning is a subfield of machine learning that involves learning through interaction with an environment. The goal is for an agent to learn optimal behavior in the environment through trial and error. The Q-learning algorithm is one of the most popular reinforcement learning algorithms and has been successfully applied to a variety of problems. In this project, we investigate the performance of the Q-learning algorithm on the Taxi-v3 environment, a classic reinforcement learning problem.
+
+\section{Methodology}
+We used the code provided in the tutorial by Rahul Agarwal on Towards Data Science~\cite{agarwal2020} as the starting point for our experiments. We selected the Q-learning algorithm and the Taxi-v3 environment for our experiments, and varied the learning rate from 0.1 to 1.0 in increments of 0.1. For each learning rate, we trained the Q-learning agent on the Taxi-v3 environment and recorded the time taken to converge and the average reward obtained by the learned policy. We also ran the learned policies for each learning rate for various starting states and calculated the average reward to determine which learning rate results in the most average reward.
+
+\section{Results}
+Our experiments revealed that the Q-learning algorithm is effective in solving the Taxi-v3 environment, as the agent was able to learn optimal behavior and achieve high rewards. We observed that as the learning rate increased, the time taken to converge decreased, but the average reward obtained by the learned policy initially increased and then decreased. We found that the optimal learning rate that resulted in the most average reward was 0.4. Furthermore, we noticed that as the number of episodes increased, the Q-learning algorithm performed better and achieved higher rewards.
+
+\section{Conclusion}
+In conclusion, our experiments demonstrate that the Q-learning algorithm is a powerful and effective reinforcement learning algorithm for solving the Taxi-v3 environment. We found that the optimal learning rate for this environment was 0.4, which resulted in the highest average reward. Our study suggests that further research is needed to investigate the impact of other hyperparameters, such as the discount factor and exploration rate, on the performance of the Q-learning algorithm on different environments.
+
+\section*{Acknowledgment}
+We would like to thank Rahul Agarwal for his tutorial on solving the Taxi-v3 environment with Q-learning.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
