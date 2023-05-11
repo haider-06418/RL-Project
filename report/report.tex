@@ -4,6 +4,7 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{subfigure}
@@ -31,9 +32,9 @@ ma06371@st.habib.edu.pk}
 \maketitle
 
 \begin{abstract}
- In this research paper, we focus on the impact of the learning rate parameter, $\alpha$, on the performance of Q-learning. We compare the performance of Q-learning for various values of $\alpha$. Specifically, we evaluate the impact of $\alpha$ on two key performance metrics: computational efficiency, i.e., the time taken to converge, and maximizing reward, i.e., the average reward obtained by running the learned policies for various starting states. We have implemented the Q-learning algorithm on the Taxi learning problem using OpenAI's Gym Toy Text Taxi environment.
+ In this research paper, we focus on the impact of the learning rate parameter, $\alpha$, on the performance of Q-learning. We compare the performance of Q-learning for various values of $\alpha$. Specifically, we evaluate the impact of $\alpha$ on two key performance metrics: computational efficiency, i.e., the time taken to converge, and maximizing reward, i.e., the average reward obtained by running the learned policies for various starting states. We have implemented the Q-learning algorithm on the Taxi learning problem using OpenAI's Gym Toy Text Taxi environment. The $\alpha$ value that results in the highest average reward should be identified to determine which $\alpha$ value is more effective at maximizing reward. 
+ \newline
 \end{abstract}
-
 \section{Introduction}
 Reinforcement learning is a subfield of machine learning that involves learning through interaction with an environment. The goal is for an agent to learn optimal behavior in the environment through trial and error. The Q-learning algorithm is one of the most popular reinforcement learning algorithms and has been successfully applied to a variety of problems. \\ \\ Q-learning is a model-free, off-policy algorithm that seeks to learn the optimal action-value function for a given task. The algorithm iteratively updates the Q-values of each state-action pair based on the rewards received by the agent and the predicted future rewards. By iteratively improving the policy based on the learned Q-values, the agent can eventually converge to an optimal policy that maximizes the expected cumulative reward over time. \\ \\ The Taxi Problem is a classical problem in Reinforcement Learning. In this problem, the agent (taxi) needs to pick up the passenger from one of the four colored place and deliver him/her to the destination (also one of the four colored place). The game is in 5 by 5 grid world. There are six actions that are available to the agent in this game: LEFT, RIGHT, UP, DOWN, PICKUP and PUTDOWN. The first four action will make the agent move 1 step forward according to the direction of the action, but won't have effect when the agent hits the wall or boundaries. At each step, the agent will receive a reward of -1. However, when the delivery is achieved, it will receive a reward of 20. In some conditions, several actions are illegal. This includes but not limited to take PUTDOWN action when there is no passenger in the taxi or it is not the destination spot, PICKUP a passenger where there is no passenger and so on. All these illegal action will cause a reward of -10 and change nothing. Thus, without any state abstraction, there are totally 500 states, including 25 position of the taxi, 4 possible location of the destination, and 5 possible location of the passenger (four colors and taxi). \\ \\ In this paper, we investigate the performance of the $\alpha$ in Q-learning algorithm on the Taxi-v3 environment which is a part of OpenAI's GYM Toy Text framework. The remainder of this paper is organized as follows. In Section 2, we describe the problem formulation and the methodology used in our experiments. Section 3 presents and discusses the experimental results. Section 4 provides a brief discussion on the results, and Section 5 concludes the paper by summarizing the main findings and their implications.
 
@@ -81,7 +82,11 @@ Rewards are as follows:
 We implemented Q-learning in Python using the OpenAI Gym toolkit. We have used the tabular Q-learning approach, which maintains a table of state-action values, to learn the optimal policy. We initialize the Q-values to 0 for all state-action pairs and use a decayed epsilon-greedy policy to explore the state space. 
 
 \subsection{Hyperparameters:}
-We vary the learning rate, alpha - $\alpha$, from 0.1 to 0.9 in increments of 0.1 and evaluate the performance of the algorithm for each $\alpha$ value. We do not tune any other hyperparameters, such as the discount factor, epsilon decay rate, and the number of episodes, to ensure that the impact of $\alpha$ is fairly compared. The hyperparameters set throughout are as follows: 
+\subsubsection{$\alpha$}
+We vary the learning rate, alpha - $\alpha$, from 0.1 to 0.9 in increments of 0.1 and evaluate the performance of the algorithm for each $\alpha$ value. For investigating corner cases we also have tested for $\alpha$ from 0 to 1 in increments of 0.1 to get to know of its behaviour on 0 and 1. In addition to the aforementioned $\alpha$ values, we also tested for very small and very large $\alpha$ values. Very small $\alpha$ values ranged from 0.01 to 0.09 in increments of 0.01 and very large $\alpha$ values were from 0.90 to 0.99 in increments of 0.01. 
+\newline
+\subsubsection{Other hyperparameters}
+We do not tune any other hyperparameters, such as the discount factor, epsilon decay rate, and the number of episodes, to ensure that the impact of $\alpha$ is fairly compared. The hyperparameters set throughout are as follows: 
 \begin{itemize}
     \item Discount rate - $\gamma$ = 1.0
     \item Exploration rate - $\epsilon$ = 0.1
@@ -93,18 +98,136 @@ We vary the learning rate, alpha - $\alpha$, from 0.1 to 0.9 in increments of 0.
 We evaluate the performance of the Q-Learning algorithm in terms of two metrics: computational efficiency, i.e., the time taken to converge, and maximizing reward, i.e., the average reward obtained by running the learned policies for various starting states. To measure computational efficiency, we record the number of episodes required for the algorithms to converge to an optimal policy. To measure maximizing reward, we run the learned policies for each $\alpha$ value for various starting states and calculate the average reward. 
 
 \subsection{Experimental Setup:}
-
-\subsection{Statistical Analysis:}
-
+We conduct a total of 5 independent runs for each $\alpha$ value and take the mean of both the performance metrics; time taken to converge and reward. We use various starting states assigned randomly for each experiment and randomize the location of the passenger and destination in each episode to ensure that the our Q-learning algorithm generalize to different scenarios. 
 
 \section{Results}
-Results  here
+Our results showed that the choice of $\alpha$ had a significant impact on the agent's performance. Choosing an appropriate value for $\alpha$ is important for the Q-learning algorithm to converge to the optimal policy. \\ \\ Our results, Plots 1 and 2 shown below (each plot is an independent run) show that if $\alpha$ is too high, the agent may overreact to new information and may be slow to learn hence may require more time to converge in turn lowering reward. Similarly if $\alpha$ is too low, the agent may be slow to learn hence may require more time to converge or fail to converge in turn lowering reward. As evident through as results below, the learning rate at which we are getting the maximum reward is in the range of 0.4 to 0.6, mostly at 0.5, and at this range the agent is taking the least time to converge. Therefore, the learning rate should be set some where in between 0.4 and 0.6 as we saw that we are getting maximum reward. 
+% plot 2 and 5
+% \begin{figure}[htbp]
+% \centerline{\includegraphics[scale=0.5]{Plots/alpha vs time 2.png}}
+% \caption{Plot 1 - Alpha vs Time}
+% \label{fig}
+% \end{figure}
+
+% \begin{figure}[htbp]
+% \centerline{\includegraphics[scale=0.5]{Plots/alpha vs reward 2.png}}
+% \caption{Plot 1 - Alpha vs Reward}
+% \label{fig}
+% \end{figure}
+
+% \begin{figure}[htbp]
+% \centerline{\includegraphics[scale=0.5]{Plots/alpha vs time 5.png}}
+% \caption{Plot 2 - Alpha vs Time}
+% \label{fig}
+% \end{figure}
+
+% \begin{figure}[htbp]
+% \centerline{\includegraphics[scale=0.5]{Plots/alpha vs reward 5.png}}
+% \caption{Plot 2 - Alpha vs Reward}
+% \label{fig}
+% \end{figure}
+
+\begin{figure*}[htbp]
+    \centering
+    \begin{minipage}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{Plots/alpha vs time 2.png}
+        \caption{Plot 1 - Alpha vs Time}
+        \label{fig:figure1}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{Plots/alpha vs reward 2.png}
+        \caption{Plot 1 - Alpha vs Reward}
+        \label{fig:figure2}
+    \end{minipage}
+
+    \vspace{0.5cm}
+
+    \begin{minipage}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{Plots/alpha vs time 5.png}
+        \caption{Plot 2 - Alpha vs Time}
+        \label{fig:figure3}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.45\linewidth}
+        \centering
+        \includegraphics[width=\textwidth]{Plots/alpha vs reward 5.png}
+        \caption{Plot 2 - Alpha vs Reward}
+        \label{fig:figure4}
+    \end{minipage}
+\end{figure*}
+
+For cases such as very low or very high $\alpha$ values, the time taken to converge was higher than normal range of $\alpha$ values such as seen below in plot 3 of very small $\alpha$ values ranged from 0.01 to 0.09 in increments of 0.01. Here we can also notice that as we approach to 0.09, we are maximizing reward and getting less time to converge. This supports our stance that for very small $\alpha$ values, the agent will not maximize reward and will take longer to converge but as 0.09 is close to 0.1 which is relatively a larger value than all of the $\alpha$ values in the range therefore it will maximize reward and take least time to converge. 
+% plot cc 1 
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[t]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Plots/alpha vs time cc 1.jpg}
+    \caption{Alpha vs Time}
+    \label{fig:figure98}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.45\linewidth}
+    \includegraphics[width=\linewidth]{Plots/alpha vs reward cc 1.jpg}
+    \caption{Alpha vs Reward}
+    \label{fig:figure99}
+  \end{subfigure}
+  \caption{Plot 3}
+  \label{fig:bothfigures}
+\end{figure}
+\newline
+% \includegraphics[scale=0.3]{Plots/alpha vs time cc 1.jpg}
+% \caption{Plot 3 - Alpha vs Time}
+% \includegraphics[scale=0.3]{Plots/alpha vs reward cc 1.jpg}
+% \caption{Plot 3 - Alpha vs Reward}
+
+For $\alpha$ equal to 0, it our agent was failing to converge since it the program kept running which tells it did not converge. All runs for $\alpha$ = 0 were aborted after running for 5 minutes since it was not converging. For $\alpha$ equal to 1 our test went was expected and it took more time to converge and did not maximize reward, as shown by plot 6. Plot 6 also highlights our finding that at 0.4 $ \geq \alpha \leq$ 0.6 we are getting maximum reward and least time to converge. Exact $\alpha$ at which we are getting maximum reward and least time to converge is $\alpha$ = 0.5 for plot 4 on next page. \\ \\ Our study also highlights the relation between time taken to converge and reward. After analyzing on the data for time vs reward, we can conclude that they have an inverse relation, i.e. for a Q-Learning Problem, the time taken to converge is inversely proportional to the reward obtained. All the above result plots also prove this that an agent takes less time to obtain maximum reward and vice versa. The following plots also back our findings as it can be seen that for more time the reward is less and for less time the reward is more. 
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[t]{0.45\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Plots/tvr 1.png}
+    \caption{Plot 5 - Time vs Reward}
+    \label{fig:figure89}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.45\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Plots/trv2.png}
+    \caption{Plot 6 - Time vs Reward}
+    \label{fig:figure88}
+  \end{subfigure}
+  
+  \vspace{0.5cm}
+  
+  \begin{subfigure}[t]{0.45\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Plots/tvr 3.jpg}
+    \caption{Plot 7 - Time vs Reward}
+    \label{fig:figure87}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.45\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{Plots/tvr cc 1.jpg}
+    \caption{Plot 8 - Time vs Reward}
+    \label{fig:figure86}
+  \end{subfigure}
+  \caption{Plot 5 - 8: Time vs Reward Plots}
+  \label{fig:allfigures}
+\end{figure}
+
+ 
 
 \section{Discussion}
 Discussion here
 
 \section{Conclusion}
-Conclusion here
+Up till now, we can summarize our findings as the 
 
 
 
