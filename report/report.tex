@@ -1,42 +1,119 @@
-\documentclass{IEEEtran}
+\documentclass[conference]{IEEEtran}
 
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
 \usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
 \usepackage{subfigure}
-\usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{hyperref}
 
 \begin{document}
 
-\title{Reinforcement Learning Project Report: Q-learning Algorithm}
+\title{CS 352 - Introduction to Reinforcement Learning \\ Habib University \\ {\large Project Report, Spring 2023} \\ {\LARGE Impact of $\alpha$ in Q-Learning}}
 
-\author{Muhammad Haider Abbas-Muhammad Ahsan\
-Habib University\
-ma06418@st.habib.edu.pk-ma06371@st.habib.edu.pk}
+
+\author{\IEEEauthorblockN{Mohammed Haider Abbas}
+\IEEEauthorblockA{\textit{Dhanani School of Science and Engineering} \\
+\textit{Habib University}\\
+ma06418@st.habib.edu.pk}
+\and
+\IEEEauthorblockN{Muhammad Ahsan}
+\IEEEauthorblockA{\textit{Dhanani School of Science and Engineering} \\
+\textit{Habib University}\\
+ma06371@st.habib.edu.pk}
+}
 
 \maketitle
 
 \begin{abstract}
-Reinforcement learning is a powerful machine learning technique that enables an agent to learn optimal behavior in a given environment through trial and error. In this project, we explore the performance of the Q-learning algorithm, one of the most popular RL algorithms, on the Taxi-v3 environment. Specifically, we investigate the impact of the learning rate on the computational efficiency and the maximization of reward.
+ In this research paper, we focus on the impact of the learning rate parameter, $\alpha$, on the performance of Q-learning. We compare the performance of Q-learning for various values of $\alpha$. Specifically, we evaluate the impact of $\alpha$ on two key performance metrics: computational efficiency, i.e., the time taken to converge, and maximizing reward, i.e., the average reward obtained by running the learned policies for various starting states. We have implemented the Q-learning algorithm on the Taxi learning problem using OpenAI's Gym Toy Text Taxi environment.
 \end{abstract}
 
 \section{Introduction}
-Reinforcement learning is a subfield of machine learning that involves learning through interaction with an environment. The goal is for an agent to learn optimal behavior in the environment through trial and error. The Q-learning algorithm is one of the most popular reinforcement learning algorithms and has been successfully applied to a variety of problems. In this project, we investigate the performance of the Q-learning algorithm on the Taxi-v3 environment, a classic reinforcement learning problem.
+Reinforcement learning is a subfield of machine learning that involves learning through interaction with an environment. The goal is for an agent to learn optimal behavior in the environment through trial and error. The Q-learning algorithm is one of the most popular reinforcement learning algorithms and has been successfully applied to a variety of problems. \\ \\ Q-learning is a model-free, off-policy algorithm that seeks to learn the optimal action-value function for a given task. The algorithm iteratively updates the Q-values of each state-action pair based on the rewards received by the agent and the predicted future rewards. By iteratively improving the policy based on the learned Q-values, the agent can eventually converge to an optimal policy that maximizes the expected cumulative reward over time. \\ \\ The Taxi Problem is a classical problem in Reinforcement Learning. In this problem, the agent (taxi) needs to pick up the passenger from one of the four colored place and deliver him/her to the destination (also one of the four colored place). The game is in 5 by 5 grid world. There are six actions that are available to the agent in this game: LEFT, RIGHT, UP, DOWN, PICKUP and PUTDOWN. The first four action will make the agent move 1 step forward according to the direction of the action, but won't have effect when the agent hits the wall or boundaries. At each step, the agent will receive a reward of -1. However, when the delivery is achieved, it will receive a reward of 20. In some conditions, several actions are illegal. This includes but not limited to take PUTDOWN action when there is no passenger in the taxi or it is not the destination spot, PICKUP a passenger where there is no passenger and so on. All these illegal action will cause a reward of -10 and change nothing. Thus, without any state abstraction, there are totally 500 states, including 25 position of the taxi, 4 possible location of the destination, and 5 possible location of the passenger (four colors and taxi). \\ \\ In this paper, we investigate the performance of the $\alpha$ in Q-learning algorithm on the Taxi-v3 environment which is a part of OpenAI's GYM Toy Text framework. The remainder of this paper is organized as follows. In Section 2, we describe the problem formulation and the methodology used in our experiments. Section 3 presents and discusses the experimental results. Section 4 provides a brief discussion on the results, and Section 5 concludes the paper by summarizing the main findings and their implications.
 
 \section{Methodology}
-We used the code provided in the tutorial by Rahul Agarwal on Towards Data Science~\cite{agarwal2020} as the starting point for our experiments. We selected the Q-learning algorithm and the Taxi-v3 environment for our experiments, and varied the learning rate from 0.1 to 1.0 in increments of 0.1. For each learning rate, we trained the Q-learning agent on the Taxi-v3 environment and recorded the time taken to converge and the average reward obtained by the learned policy. We also ran the learned policies for each learning rate for various starting states and calculated the average reward to determine which learning rate results in the most average reward.
+The source code for our Q-learning implementation can be found at the following Github repository: \href{https://github.com/haider-06418/RL-Project/tree/main}{Project Repository}. The experiments were conducted using the default hyperparameters, with the exception of the learning rate parameter $\alpha$, which was varied across a range of values to compare the algorithms in terms of computational efficiency and maximizing reward.
+
+\subsection{Setup:}
+All experiments were conducted using Python 3.10 in the VS Code development environment. The following are the main Python libraries used:
+\begin{itemize}
+\item OpenAI Gym
+\item NumPy
+\item Matplotlib
+\end{itemize}
+
+\subsection{Problem Formulation:}
+We consider the Taxi-v3 environment from the OpenAI Gym as our testbed. The objective of the environment is for the agent, a taxi, to navigate through a grid-world to pick up and drop off passengers at specified locations. The state space of the environment is discrete, and the action space is finite.
+\newline
+\subsubsection{Description} 
+There are four designated locations in the grid world indicated by R(ed), G(reen), Y(ellow), and B(lue). When the episode starts, the taxi starts off at a random square and the passenger is at a random location. The taxi drives to the passenger's location, picks up the passenger, drives to the passenger's destination (another one of the four specified locations), and then drops off the passenger. Once the passenger is dropped off, the episode ends.
+\newline
+\subsubsection{Actions}
+There are 6 discrete deterministic actions:
+\begin{itemize}
+    \item move south
+    \item move north
+    \item move east
+    \item move west
+    \item pickup passenger
+    \item drop off passenger
+    \newline
+\end{itemize}
+\subsubsection{Grid World}
+There are 500 discrete states since there are 25 taxi positions, 5 possible locations of the passenger (Red, Green, Yellow, Blue, in Taxi), and 4 destination locations (Red, Green, Yellow, Blue). Note that there are 400 states that can actually be reached during an episode. The missing states correspond to situations in which the passenger is at the same location as their destination, as this typically signals the end of an episode. Four additional states can be observed right after a successful episodes, when both the passenger and the taxi are at the destination. This gives a total of 404 reachable discrete states. Each state space is represented by the tuple: (taxi\_row, taxi\_col, passenger\_location, destination). An observation is an integer that encodes the corresponding state. The state tuple can then be decoded with the "decode" method.
+\newline
+\subsubsection{Rewards}
+Rewards are as follows:
+\begin{itemize}
+    \item -1 per step unless other reward is triggered.
+    \item +20 delivering passenger.
+    \item -10  executing "pickup" and "drop-off" actions illegally.
+    \newline
+\end{itemize}
+
+\subsection{Algorithm Implementation:}
+We implemented Q-learning in Python using the OpenAI Gym toolkit. We have used the tabular Q-learning approach, which maintains a table of state-action values, to learn the optimal policy. We initialize the Q-values to 0 for all state-action pairs and use a decayed epsilon-greedy policy to explore the state space. 
+
+\subsection{Hyperparameters:}
+We vary the learning rate, alpha - $\alpha$, from 0.1 to 0.9 in increments of 0.1 and evaluate the performance of the algorithm for each $\alpha$ value. We do not tune any other hyperparameters, such as the discount factor, epsilon decay rate, and the number of episodes, to ensure that the impact of $\alpha$ is fairly compared. The hyperparameters set throughout are as follows: 
+\begin{itemize}
+    \item Discount rate - $\gamma$ = 1.0
+    \item Exploration rate - $\epsilon$ = 0.1
+    \item Number of episodes = 10000
+    \newline
+\end{itemize} 
+
+\subsection{Performance Metrics:}
+We evaluate the performance of the Q-Learning algorithm in terms of two metrics: computational efficiency, i.e., the time taken to converge, and maximizing reward, i.e., the average reward obtained by running the learned policies for various starting states. To measure computational efficiency, we record the number of episodes required for the algorithms to converge to an optimal policy. To measure maximizing reward, we run the learned policies for each $\alpha$ value for various starting states and calculate the average reward. 
+
+\subsection{Experimental Setup:}
+
+\subsection{Statistical Analysis:}
+
 
 \section{Results}
-Our experiments revealed that the Q-learning algorithm is effective in solving the Taxi-v3 environment, as the agent was able to learn optimal behavior and achieve high rewards. We observed that as the learning rate increased, the time taken to converge decreased, but the average reward obtained by the learned policy initially increased and then decreased. We found that the optimal learning rate that resulted in the most average reward was 0.4. Furthermore, we noticed that as the number of episodes increased, the Q-learning algorithm performed better and achieved higher rewards.
+Results  here
+
+\section{Discussion}
+Discussion here
 
 \section{Conclusion}
-In conclusion, our experiments demonstrate that the Q-learning algorithm is a powerful and effective reinforcement learning algorithm for solving the Taxi-v3 environment. We found that the optimal learning rate for this environment was 0.4, which resulted in the highest average reward. Our study suggests that further research is needed to investigate the impact of other hyperparameters, such as the discount factor and exploration rate, on the performance of the Q-learning algorithm on different environments.
+Conclusion here
+
+
 
 \section*{Acknowledgment}
-We would like to thank Rahul Agarwal for his tutorial on solving the Taxi-v3 environment with Q-learning.
+Acknowledgemet here
+We would like to thank Rahul Agarwal for his tutorial \cite{agarwal2020} on solving the Taxi-v3 environment with Q-learning.
 
-\bibliographystyle{IEEEtran}
-\bibliography{references}
+\begin{thebibliography}{00}
+\bibitem{agarwal2020} link here
+\end{thebibliography}
 
 \end{document}
