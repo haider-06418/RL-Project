@@ -36,10 +36,10 @@ ma06371@st.habib.edu.pk}
  \newline
 \end{abstract}
 \section{Introduction}
-Reinforcement learning is a subfield of machine learning that involves learning through interaction with an environment. The goal is for an agent to learn optimal behavior in the environment through trial and error. The Q-learning algorithm is one of the most popular reinforcement learning algorithms and has been successfully applied to a variety of problems. \\ \\ Q-learning \cite{1} is a model-free, off-policy algorithm that seeks to learn the optimal action-value function for a given task. The algorithm iteratively updates the Q-values of each state-action pair based on the rewards received by the agent and the predicted future rewards. By iteratively improving the policy based on the learned Q-values, the agent can eventually converge to an optimal policy that maximizes the expected cumulative reward over time. \\ \\ The Taxi Problem\cite{2} is a classical problem in Reinforcement Learning. In this problem, the agent (taxi) needs to pick up the passenger from one of the four colored place and deliver him/her to the destination (also one of the four colored place). The game is in 5 by 5 grid world. There are six actions that are available to the agent in this game: LEFT, RIGHT, UP, DOWN, PICKUP and PUTDOWN. The first four action will make the agent move 1 step forward according to the direction of the action, but won't have effect when the agent hits the wall or boundaries. At each step, the agent will receive a reward of -1. However, when the delivery is achieved, it will receive a reward of 20. In some conditions, several actions are illegal. This includes but not limited to take PUTDOWN action when there is no passenger in the taxi or it is not the destination spot, PICKUP a passenger where there is no passenger and so on. All these illegal action will cause a reward of -10 and change nothing. Thus, without any state abstraction, there are totally 500 states, including 25 position of the taxi, 4 possible location of the destination, and 5 possible location of the passenger (four colors and taxi). \\ \\ In this paper, we investigate the performance of the $\alpha$ in Q-learning algorithm on the Taxi-v3 environment \cite{3} which is a part of OpenAI's GYM Toy Text framework. The remainder of this paper is organized as follows. In Section 2, we describe the problem formulation and the methodology used in our experiments. Section 3 presents and discusses the experimental results, and Section 4 concludes the paper by summarizing the main findings and their implications.
+Reinforcement learning is a subfield of machine learning that involves learning through interaction with an environment. The goal is for an agent to learn optimal behavior in the environment through trial and error. The Q-learning algorithm is one of the most popular reinforcement learning algorithms and has been successfully applied to a variety of problems. \\ \\ Q-learning \cite{1} is a model-free, off-policy algorithm that seeks to learn the optimal action-value function for a given task. The algorithm iteratively updates the Q-values of each state-action pair based on the rewards received by the agent and the predicted future rewards. By iteratively improving the policy based on the learned Q-values, the agent can eventually converge to an optimal policy that maximizes the expected cumulative reward over time. \\ \\ The Taxi Problem\cite{2} is a classical problem in Reinforcement Learning. In this problem, the agent (taxi) needs to pick up the passenger from one of the four colored place and deliver the passenger to the destination (also one of the four colored place). The game is in 5 by 5 grid world. There are six actions that are available to the agent in this game: LEFT, RIGHT, UP, DOWN, PICKUP and PUTDOWN. The first four action will make the agent move 1 step forward according to the direction of the action, but won't have effect when the agent hits the wall or boundaries. At each step, the agent will receive a reward of -1. However, when the delivery is achieved, it will receive a reward of 20. In some conditions, several actions are illegal. This includes but not limited to take PUTDOWN action when there is no passenger in the taxi or it is not the destination spot, PICKUP a passenger where there is no passenger and so on. All these illegal action will cause a reward of -10 and change nothing. Thus, without any state abstraction, there are totally 500 states, including 25 position of the taxi, 4 possible location of the destination, and 5 possible location of the passenger (four colors and taxi). \\ \\ In this paper, we investigate the performance of $\alpha$ in Q-learning algorithm on the Taxi-v3 environment \cite{3} which is a part of OpenAI's GYM Toy Text framework. The remainder of this paper is organized as follows. In Section 2, we describe the problem formulation and the methodology used in our experiments. Section 3 presents and discusses the experimental results, and Section 4 concludes the paper by summarizing the main findings and their implications.
 
 \section{Methodology}
-The source code for our Q-learning implementation can be found at the following Github repository: \href{https://github.com/haider-06418/RL-Project/tree/main}{Project Repository}. The experiments were conducted using the default hyperparameters, with the exception of the learning rate parameter $\alpha$, which was varied across a range of values to compare the algorithms in terms of computational efficiency and maximizing reward.
+The source code for our Q-learning implementation can be found at the following Github repository: \href{https://github.com/haider-06418/RL-Project/tree/main}{Project Repository}. The experiments were conducted using the default hyperparameters, with the exception of the learning rate parameter $\alpha$, which was varied across a range of values access the algorithm in terms of computational efficiency and maximizing reward.
 
 \subsection{Setup:}
 All experiments were conducted using Python 3.10 in the VS Code development environment. The following are the main Python libraries used:
@@ -95,7 +95,7 @@ We do not tune any other hyperparameters, such as the discount factor, epsilon d
 \end{itemize} 
 
 \subsection{Performance Metrics:}
-We evaluate the performance of the Q-Learning algorithm in terms of two metrics: computational efficiency, i.e., the time taken to converge, and maximizing reward, i.e., the average reward obtained by running the learned policies for various starting states. To measure computational efficiency, we record the number of episodes required for the algorithms to converge to an optimal policy. To measure maximizing reward, we run the learned policies for each $\alpha$ value for various starting states and calculate the average reward. 
+We evaluate the performance of the Q-Learning algorithm in terms of two metrics: computational efficiency, i.e., the time taken to converge, and maximizing reward, i.e., the average reward obtained by running the learned policies for various starting states. To measure computational efficiency, we record the average running time required for the algorithm to converge to an optimal policy. To measure maximizing reward, we run the learned policies for each $\alpha$ value for various starting states and calculate the average reward. 
 
 \subsection{Experimental Setup:}
 We conduct a total of 5 independent runs for each $\alpha$ value and take the mean of both the performance metrics; time taken to converge and reward. We use various starting states assigned randomly for each experiment and randomize the location of the passenger and destination in each episode to ensure that the our Q-learning algorithm generalize to different scenarios. 
@@ -103,30 +103,6 @@ We conduct a total of 5 independent runs for each $\alpha$ value and take the me
 \section{Results}
 Our results showed that the choice of $\alpha$ had a significant impact on the agent's performance. Choosing an appropriate value for $\alpha$ is important for the Q-learning algorithm to converge to the optimal policy. \\ \\ Our results, Plots 1 and 2 shown below (each plot is an independent run) show that if $\alpha$ is too high, the agent may overreact to new information hence may require more time to converge in turn lowering reward. Similarly if $\alpha$ is too low, the agent may be slow to learn hence may require more time to converge or fail to converge in turn lowering reward. As evident through as results below, the learning rate at which we are getting the maximum reward is in the range of 0.4 to 0.6, mostly at 0.5, and at this range the agent is taking the least time to converge. Therefore, the learning rate should be set some where in between 0.4 and 0.6 as we saw that we are getting maximum reward. 
 % plot 2 and 5
-% \begin{figure}[htbp]
-% \centerline{\includegraphics[scale=0.5]{Plots/alpha vs time 2.png}}
-% \caption{Plot 1 - Alpha vs Time}
-% \label{fig}
-% \end{figure}
-
-% \begin{figure}[htbp]
-% \centerline{\includegraphics[scale=0.5]{Plots/alpha vs reward 2.png}}
-% \caption{Plot 1 - Alpha vs Reward}
-% \label{fig}
-% \end{figure}
-
-% \begin{figure}[htbp]
-% \centerline{\includegraphics[scale=0.5]{Plots/alpha vs time 5.png}}
-% \caption{Plot 2 - Alpha vs Time}
-% \label{fig}
-% \end{figure}
-
-% \begin{figure}[htbp]
-% \centerline{\includegraphics[scale=0.5]{Plots/alpha vs reward 5.png}}
-% \caption{Plot 2 - Alpha vs Reward}
-% \label{fig}
-% \end{figure}
-
 \begin{figure*}[htbp]
     \centering
     \begin{minipage}[b]{0.45\linewidth}
@@ -196,12 +172,7 @@ For cases such as very low or very high $\alpha$ values, the time taken to conve
   \label{fig:bothfigures}
 \end{figure}
 
-% \includegraphics[scale=0.3]{Plots/alpha vs time cc 1.jpg}
-% \caption{Plot 3 - Alpha vs Time}
-% \includegraphics[scale=0.3]{Plots/alpha vs reward cc 1.jpg}
-% \caption{Plot 3 - Alpha vs Reward}
-
-For $\alpha$ equal to 0, it our agent was failing to converge since it the program kept running which tells it did not converge. All runs for $\alpha$ = 0 were aborted after running for 5 minutes since it was not converging. For $\alpha$ equal to 1 our test went was expected and it took more time to converge and did not maximize reward, as shown by plot 4. Plot 4 in addition to plots 1 and 2 also highlights our finding that at 0.4 $ \leq \alpha \leq$ 0.6 we are getting maximum reward and least time to converge. Exact $\alpha$ at which we are getting maximum reward and least time to converge is $\alpha$ = 0.5 for plot 4 on next page. \\ \\ Our study also highlights the relation between time taken to converge and reward. After analyzing on the data for time vs reward, we can conclude that they have an inverse relation, i.e. for a Q-Learning Problem, the time taken to converge is inversely proportional to the reward obtained or in other words maximizing reward is inversely proportional to computational efficiency i.e. time taken to converge. All the above result plots also prove this that an agent takes less time to obtain maximum reward and vice versa. The following plots also back our findings as it can be seen that for more time the reward is less and for less time the reward is more. 
+For $\alpha$ equal to 0, it our agent was failing to converge since it the program kept running which tells it did not converge. All runs for $\alpha$ = 0 were aborted after running for 5 minutes since it was not converging. For $\alpha$ equal to 1 our test went was expected and it took more time to converge and did not maximize reward, as shown by plot 4. Plot 4 in addition to plots 1 and 2 also highlights our finding that at 0.4 $ \leq \alpha \leq$ 0.6 we are getting maximum reward and least time to converge. Exact $\alpha$ at which we are getting maximum reward and least time to converge is $\alpha$ = 0.5 for plot 4 on next page. \\ \\ Our study also highlights the relation between time taken to converge and reward. After analyzing on the data for time vs reward, we can conclude that they have an inverse relation, i.e. for a Q-Learning Problem, the time taken to converge is inversely proportional to the reward obtained or in other words maximizing reward is inversely proportional to computational efficiency i.e. time taken to converge. All the above result plots also prove this that an agent takes less time to obtain maximum reward and vice versa. The following plots (all independent and separate runs) also back our findings as it can be seen that for more time the reward is less and for less time the reward is more. 
 
 \begin{figure}[htbp]
   \centering
@@ -237,34 +208,21 @@ For $\alpha$ equal to 0, it our agent was failing to converge since it the progr
   \caption{Plot 5 - 8: Time vs Reward Plots}
   \label{fig:allfigures}
 \end{figure}
-
-% \includegraphics[width=\linewidth]{Plots/tvr 1.png}
-% \includegraphics[width=\linewidth]{Plots/trv2.png}
-% \includegraphics[width=\linewidth]{Plots/tvr 3.jpg}
-% \includegraphics[width=\linewidth]{Plots/tvr cc 1.jpg}
  
 \section{Conclusion}
- In this study, we analyzed the performance of Q-learning algorithm for various values of the learning rate parameter, $\alpha$. We evaluated the performance of these algorithms in terms of computational efficiency and the ability to maximize rewards. \\ \\ Our results and findings can be summarized such that the choice of $\alpha$ has a significant impact on the performance of the agent. The range for $\alpha$ is 0 $\leq \alpha \leq$ 1. For low and high values of $\alpha$, the agent did not maximize reward and was taking more time to converge. For low values of $\alpha$ the agent was slow to learn hence requiring more time to converge (or failed to converge at 0) and for high values of $\alpha$ the agent was overreacting to new information hence hence requiring more time to converge. Therefore the optimal range of $\alpha$ where it gave maximum reward and was computationally efficient i.e. faster convergence was in the range of 0.4  $\leq \alpha \leq$ 0.6 with the most optimal value of $\alpha$ being at 0.5. Our findings also led to discovering the relationship between converge time and reward, such that maximizing reward is inversely proportional to computational efficiency i.e. time taken to converge. \\ \\ In conclusion, this study highlights the importance of selecting an appropriate learning rate parameter for Q-learning algorithm in reinforcement learning. By selecting an appropriate $\alpha$ value within a certain range, we can optimize the performance of the Q-Learning algorithm. 
+ In this study, we analyzed the performance of Q-learning algorithm for various values of the learning rate parameter, $\alpha$. We evaluated the performance of these algorithms in terms of computational efficiency and the ability to maximize rewards. \\ \\ Our results and findings can be summarized such that the choice of $\alpha$ has a significant impact on the performance of the agent. The range for $\alpha$ is 0 $\leq \alpha \leq$ 1. For low and high values of $\alpha$, the agent did not maximize reward and was taking more time to converge. For low values of $\alpha$ the agent was slow to learn hence requiring more time to converge (or failed to converge at 0) and for high values of $\alpha$ the agent was overreacting to new information hence requiring more time to converge. Therefore the optimal range of $\alpha$ where it gave maximum reward and was computationally efficient i.e. faster convergence was in the range of 0.4  $\leq \alpha \leq$ 0.6 with the most optimal value of $\alpha$ being at 0.5. Our findings also led to discovering the relationship between converge time and reward, such that maximizing reward is inversely proportional to computational efficiency i.e. time taken to converge. More the time taken to converge, less the reward and vice verse. \\ \\ In conclusion, this study highlights the importance of selecting an appropriate learning rate parameter for Q-learning algorithm in reinforcement learning. By selecting an appropriate $\alpha$ value within a certain range, we can optimize the performance of the Q-Learning algorithm. 
 
 \section*{Acknowledgment}
 We would like to thank Brendon Martin and Satwick Kansal for their guide \cite{5} on solving the Taxi problem with Q-learning. 
 
 \begin{thebibliography}{00}
-
 \bibitem{1} P. Labarta Bajo, “Reinforcement Learning [Part 2]: The Q-learning Algorithm | HackerNoon,” hackernoon.com, Mar. 28, 2022. https://hackernoon.com/reinforcement-learning-part-2-the-q-learning-algorithm (accessed May 06, 2023).
-
 \bibitem{2} G. Mayers, “Reinforcement Learning: Using Q-Learning to Drive a Taxi!,” Medium, Jul. 30, 2020. https://medium.com/analytics-vidhya/reinforcement-learning-using-q-learning-to-drive-a-taxi-5720f7cf38df (accessed May 05, 2023).
-
 ‌\bibitem{3} “Taxi - Gym Documentation,” www.gymlibrary.dev. https://www.gymlibrary.dev/environments/toy\_text/taxi/
-
 \bibitem{4} C. De-Yu, “Q-Learning and SASAR, with Python,” Medium, Jul. 09, 2021. https://towardsdatascience.com/q-learning-and-sasar-with-python-3775f86bd178 (accessed May 05, 2023).
-
 ‌\bibitem{5} B. Martin and S. Kansal, “Reinforcement Q-Learning from Scratch in Python with OpenAI Gym,” Learndatasci.com, 2019. https://www.learndatasci.com/tutorials/reinforcement-q-learning-scratch-python-openai-gym/ (accessed May 03, 2023).
-
 ‌
 \end{thebibliography}
 
 
 \end{document}
-
-
